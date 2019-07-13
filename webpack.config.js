@@ -47,9 +47,7 @@ const webpackConfig = {
                             reloadAll: true
                         },
                     },
-                    'css-loader',
-                    'postcss-loader',
-                    'less-loader',
+                    'css-loader'
                 ]
             }
         ]
