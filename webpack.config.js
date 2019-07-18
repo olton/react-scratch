@@ -5,6 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const autoprefixer = require('autoprefixer');
 
 const env = process.env.NODE_ENV || 'development';
 const isProduction = env === 'production';
@@ -37,12 +38,17 @@ const webpackConfig = {
     module: {
         rules: [
             {
+                test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+                loader: 'url-loader?limit=100000'
+            },
+            {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: 'babel-loader'
             },
             {
-                test: /\.css$/,
+                test: /\.(less)$/,
+                exclude: /node_modules/,
                 use: [
                     {
                         loader: MiniCssExtractPlugin.loader,
@@ -51,7 +57,19 @@ const webpackConfig = {
                             reloadAll: true
                         },
                     },
-                    'css-loader'
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: [
+                                autoprefixer({
+                                    overrideBrowserslist :['IE 10', 'IE 11', 'last 2 version']
+                                })
+                            ],
+                            sourceMap: true
+                        }
+                    },
+                    "less-loader"
                 ]
             }
         ]
